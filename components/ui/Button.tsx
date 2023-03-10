@@ -1,66 +1,74 @@
-// import { cva, VariantProps } from "class-variance-authority";
-// const buttonStyles = cva("rounded text-center border-1", {
-//     variants: {
-//         color: {
-//             primary: " bg-blue-600 text-white border-0  hover:bg-blue-700",
-//             secondary: " bg-gray-700 text-white border-gray-600 hover:bg-gray-600 ",
-//             none: "bg-transparent hover:bg-gray-900 border-0",
-//             danger: " bg-red-600 text-white hover:bg-red-700 border-red-500",
-//         },
-//         padding: {
-//             none: "p-0",
-//             normal: "py-2 px-4",
-//             small: "p-1",
-//         },
-//         fullWidth: {
-//             true: "w-full",
-//             false: "w-auto",
-//         },
-//     },
-//     defaultVariants: {
-//         color: "none",
-//         padding: "normal",
-//         fullWidth: false,
-//     },
-// });
+import { cva, type VariantProps } from "class-variance-authority";
+import Link from "next/link";
 
-// export interface ButtonProps extends VariantProps<typeof buttonStyles> {
-//     className?: string;
-//     onClick?: () => void;
-//     onMouseOver?: () => void;
-//     children: React.ReactNode;
-//     type?: "button" | "submit" | "reset";
-//     to?: string;
-//     padding?: "none" | "small" | "normal";
-// }
+const buttonStyles = cva("font-semibold text-center border-1", {
+  variants: {
+    color: {
+      primary:
+        " bg-san-marino-500 text-white border-0  hover:bg-san-marino-600",
+      secondary: " bg-white text-san-marino-900 hover:bg-san-marino-50 ",
+      secondaryDarker:
+        " bg-san-marino-100 text-san-marino-900 hover:bg-san-marino-200",
+      none: "bg-transparent hover:bg-gray-900 border-0",
+      danger: " bg-red-600 text-white hover:bg-red-700 border-red-500",
+    },
+    padding: {
+      none: "p-0",
+      normal: "py-2 px-4",
+      small: "p-1",
+    },
+    fullWidth: {
+      true: "w-full",
+      false: "w-auto",
+    },
+    rounded: {
+      rounded: "rounded",
+      roundedLg: "rounded-lg",
+      full: "rounded-full",
+      none: "",
+    },
+  },
+  defaultVariants: {
+    color: "none",
+    padding: "normal",
+    fullWidth: false,
+    rounded: "rounded",
+  },
+});
 
-// function Button({
-//     color,
-//     onClick,
-//     type,
-//     children,
-//     to,
-//     padding,
-//     fullWidth,
-//     onMouseOver,
-//     className,
-// }: ButtonProps) {
-//     return to ? (
-//         <Link to={to} className={buttonStyles({ color, padding, fullWidth })}>
-//             <button onClick={onClick} type={type} onMouseOver={onMouseOver}>
-//                 {children}
-//             </button>
-//         </Link>
-//     ) : (
-//         <button
-//             className={`${buttonStyles({ color, padding, fullWidth })} ${className}`}
-//             onClick={onClick}
-//             type={type}
-//             onMouseOver={onMouseOver}
-//         >
-//             {children}
-//         </button>
-//     );
-// }
+export interface ButtonProps extends VariantProps<typeof buttonStyles> {
+  className?: string;
+  onClick?: () => void;
+  onMouseOver?: () => void;
+  children: React.ReactNode;
+  type?: "button" | "submit" | "reset";
+  padding?: "none" | "small" | "normal";
+  rounded?: "rounded" | "roundedLg" | "full" | "none";
+}
 
-// export default Button;
+function Button({
+  color,
+  onClick,
+  type,
+  children,
+  padding,
+  fullWidth,
+  onMouseOver,
+  className,
+  rounded,
+}: ButtonProps) {
+  return (
+    <button
+      className={`${buttonStyles({ color, padding, fullWidth, rounded })} ${
+        className ?? ""
+      }`}
+      onClick={onClick}
+      type={type}
+      onMouseOver={onMouseOver}
+    >
+      {children}
+    </button>
+  );
+}
+
+export default Button;

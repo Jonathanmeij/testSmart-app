@@ -21,11 +21,16 @@ const buttonStyles = cva("rounded font-semibold text-center border-1", {
       true: "w-full",
       false: "w-auto",
     },
+    animate: {
+      true: " transition ease-in-out hover:scale-105 ",
+      false: "",
+    },
   },
   defaultVariants: {
     color: "none",
     padding: "normal",
     fullWidth: false,
+    animate: false,
   },
 });
 
@@ -49,11 +54,12 @@ function LinkButton({
   fullWidth,
   onMouseOver,
   className,
+  animate,
 }: ButtonProps) {
   return (
     <Link
       href={to}
-      className={`${buttonStyles({ color, padding, fullWidth })} ${
+      className={`${buttonStyles({ color, padding, fullWidth, animate })} ${
         className ?? ""
       }`}
     >

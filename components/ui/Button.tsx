@@ -27,12 +27,17 @@ const buttonStyles = cva("font-semibold text-center border-1", {
       full: "rounded-full",
       none: "",
     },
+    animate: {
+      true: " transition ease-in-out hover:scale-105 ",
+      false: "",
+    },
   },
   defaultVariants: {
     color: "none",
     padding: "normal",
     fullWidth: false,
     rounded: "rounded",
+    animate: false,
   },
 });
 
@@ -56,12 +61,17 @@ function Button({
   onMouseOver,
   className,
   rounded,
+  animate,
 }: ButtonProps) {
   return (
     <button
-      className={`${buttonStyles({ color, padding, fullWidth, rounded })} ${
-        className ?? ""
-      }`}
+      className={`${buttonStyles({
+        color,
+        padding,
+        fullWidth,
+        rounded,
+        animate,
+      })} ${className ?? ""}`}
       onClick={onClick}
       type={type}
       onMouseOver={onMouseOver}

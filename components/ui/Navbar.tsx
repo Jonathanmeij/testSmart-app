@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import Link from "next/link";
 import Image from "next/image";
@@ -7,8 +8,12 @@ import LinkButton from "./LinkButton";
 import { useRouter } from "next/router";
 import { Menu, Transition } from "@headlessui/react";
 import Divider from "./Divider";
+import { signIn, signOut, useSession } from "next-auth/react";
+import Button from "./Button";
 
 export default function Navbar() {
+  const { data: session } = useSession();
+
   return (
     <nav className="fixed h-16 w-full bg-white">
       <div className="flex h-full w-full items-center justify-between pr-6 md:pr-0">
@@ -23,21 +28,22 @@ export default function Navbar() {
             </h1>
           </Link>
           <ul className="hidden items-center gap-3 md:flex">
-            <li>
-              <LinkButton color="secondary" to="/about">
-                About
-              </LinkButton>
-            </li>
-            <li>
-              <LinkButton color="secondary" to="/login">
-                Login
-              </LinkButton>
-            </li>
-            <li>
-              <LinkButton color="primary" to="/sign-up">
-                Sign up
-              </LinkButton>
-            </li>
+            {session ? (
+              <LoggedInLinks />
+            ) : (
+              <>
+                <li>
+                  <LinkButton color="secondary" to="/about">
+                    About
+                  </LinkButton>
+                </li>
+                <li>
+                  <Button color="primary" onClick={() => void signIn()}>
+                    Sign up
+                  </Button>
+                </li>
+              </>
+            )}
           </ul>
           <div className="block md:hidden"></div>
         </Container>
@@ -45,6 +51,27 @@ export default function Navbar() {
       </div>
       <Divider />
     </nav>
+  );
+}
+
+function LoggedInLinks() {
+  const { data: session } = useSession();
+  return (
+    <>
+      <li>
+        <LinkButton color="secondary" to="/dashboard">
+          Dashboard
+        </LinkButton>
+      </li>
+      <li>
+        <div
+          onClick={() => void signOut()}
+          className="w-10 overflow-hidden rounded-full"
+        >
+          <img src={session?.user.image ?? ""} alt="User avatar" />
+        </div>
+      </li>
+    </>
   );
 }
 

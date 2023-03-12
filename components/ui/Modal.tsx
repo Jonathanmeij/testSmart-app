@@ -38,7 +38,7 @@ export function Modal({ isOpen, setIsOpen, children }: ModalProps) {
           <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
             <Dialog.Panel className="flex w-screen justify-center">
               <Card
-                rounded="roundedLg"
+                rounded="rounded"
                 shadow="none"
                 className="w-full max-w-md "
               >

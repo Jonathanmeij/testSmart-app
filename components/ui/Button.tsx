@@ -8,7 +8,7 @@ const buttonStyles = cva("font-semibold text-center border-1", {
         " bg-san-marino-500 text-white border-0  hover:bg-san-marino-600",
       secondary: " bg-white text-san-marino-900 hover:bg-san-marino-50 ",
       secondaryDarker:
-        " bg-san-marino-100 text-san-marino-900 hover:bg-san-marino-200",
+        " border border-gray-300 text-san-marino-900 hover:bg-san-marino-100",
       none: "bg-transparent hover:bg-gray-900 border-0",
       danger: " bg-red-600 text-white hover:bg-red-700 border-red-500",
     },

@@ -55,9 +55,7 @@ export function Modal({ isOpen, setIsOpen, children }: ModalProps) {
 export function ModalHeader({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <Box>
-        <h3 className="text-lg font-medium ">{children}</h3>
-      </Box>
+      <Box>{children}</Box>
       <Divider />
     </>
   );

@@ -5,7 +5,6 @@ import Image from "next/image";
 import Container from "./Container";
 import helpIcon from "../../public/images/help.svg";
 import LinkButton from "./LinkButton";
-import { useRouter } from "next/router";
 import { Menu, Transition } from "@headlessui/react";
 import Divider from "./Divider";
 import { signIn, signOut, useSession } from "next-auth/react";
@@ -77,26 +76,6 @@ function LoggedInLinks() {
 
 function MobileMenuButton() {
   const genericHamburgerLine = `h-[2px] w-8 my-1 rounded-full bg-black transition ease transform duration-300`;
-
-  const list = {
-    open: {
-      opacity: 1,
-      y: 0,
-    },
-    closed: {
-      opacity: 0,
-      y: -40,
-    },
-  };
-
-  const item = {
-    open: {
-      transition: { staggerChildren: 0.07, delayChildren: 0.2 },
-    },
-    closed: {
-      transition: { staggerChildren: 0.05, staggerDirection: -1 },
-    },
-  };
 
   return (
     <Menu>
@@ -185,7 +164,7 @@ const MenuItemsType: MenuItem[] = [
 function MenuItems() {
   return (
     <Container className="flex w-full flex-col gap-8 rounded-xl text-2xl">
-      {MenuItemsType.map((item, index) => (
+      {MenuItemsType.map((item) => (
         <TransitionChild
           key={item.name}
           delay={item.delay}

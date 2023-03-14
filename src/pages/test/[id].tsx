@@ -1,7 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { LinkButton } from "components/ui";
 import Button from "components/ui/Button";
 import Container from "components/ui/Container";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import cross from "../../../public/images/cross.svg";
+import check from "../../../public/images/check.svg";
+import Image from "next/image";
+
+type answerStyling = "correct" | "incorrect" | "default";
 
 const test = {
   title: "HTML basics",
@@ -108,15 +114,15 @@ export default function TestPage() {
   };
 
   const AnswerElements = currentQuestionData?.answers.map((answer) => {
-    function getStyle() {
+    function getStyling(): answerStyling {
       if (isDone) {
         if (answer.isCorrect) {
-          return "bg-green-100 border-green-500";
+          return "correct";
         } else if (selectedAnswer === answer.answer) {
-          return "bg-red-100 border-red-500";
+          return "incorrect";
         }
       }
-      return "peer-checked:border-san-marino-500 peer-checked:text-san-marino-600 ";
+      return "default";
     }
 
     return (
@@ -130,7 +136,7 @@ export default function TestPage() {
           setSelectedAnswer(e.target.value);
         }}
         checked={selectedAnswer === answer.answer}
-        className={getStyle()}
+        styling={getStyling()}
       />
     );
   });
@@ -195,6 +201,7 @@ interface RadioInputProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   checked: boolean;
   className?: string;
+  styling: answerStyling;
 }
 
 function RadioInput({
@@ -205,7 +212,20 @@ function RadioInput({
   checked,
   name,
   className,
+  styling,
 }: RadioInputProps) {
+  function getStyle() {
+    if (styling === "correct") {
+      return "border-green-500 bg-green-50";
+    } else if (styling === "incorrect") {
+      return "border-red-500 bg-red-50";
+    } else {
+      return "bg-white peer-checked:border-san-marino-500";
+    }
+  }
+
+  console.log(getStyle());
+
   return (
     <div className="transition ease-in-out hover:scale-105">
       <input
@@ -220,11 +240,17 @@ function RadioInput({
       <label
         className={`${
           className ?? ""
-        } inline-flex w-full cursor-pointer items-center break-words rounded border-2 
-         bg-white p-6`}
+        } flex w-full cursor-pointer items-center justify-between break-words rounded border-2 
+          p-6 ${getStyle()}`}
         htmlFor={id}
       >
-        {label}
+        <div>{label}</div>
+        {styling === "correct" && (
+          <Image alt="check" src={check} width={20} height={20} />
+        )}
+        {styling === "incorrect" && (
+          <Image alt="x" src={cross} width={20} height={20} />
+        )}
       </label>
     </div>
   );

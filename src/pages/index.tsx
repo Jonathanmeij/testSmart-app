@@ -18,13 +18,6 @@ import arrowIcon from "../../public/images/arrow.svg";
 type Test = RouterOutputs["test"]["getAll"][0];
 
 function Home() {
-  const tests = api.test.getAll.useQuery();
-
-  if (tests.isLoading) return <div>Loading...</div>;
-  if (tests.isError) return <div>Error</div>;
-
-  console.log(tests.data);
-
   return (
     <>
       <header className=" h-[700px] bg-san-marino-100">
@@ -56,9 +49,7 @@ function Home() {
         <Container maxWidth="6xl" className="m-auto my-12">
           <h2 className="mb-12  text-3xl font-semibold">Featured tests</h2>
           <div className="flex h-full gap-6 overflow-x-scroll py-2">
-            {tests.data.map((test) => (
-              <TestCard key={test.id} test={test} />
-            ))}
+            <FeaturedTests />
           </div>
         </Container>
       </main>
@@ -67,6 +58,23 @@ function Home() {
 }
 
 export default Home;
+
+function FeaturedTests() {
+  const tests = api.test.getAll.useQuery();
+
+  if (tests.isLoading) return <div>Loading...</div>;
+  if (tests.isError) return <div>Error</div>;
+
+  console.log(tests.data);
+
+  return (
+    <div className="flex h-full gap-6 overflow-x-scroll py-2">
+      {tests.data.map((test) => (
+        <TestCard key={test.id} test={test} />
+      ))}
+    </div>
+  );
+}
 
 interface ModalProps {
   isOpen: boolean;

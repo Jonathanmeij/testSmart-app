@@ -38,7 +38,7 @@ export async function getStaticProps() {
   };
 }
 
-function Home(props: InferGetServerSidePropsType<typeof getStaticProps>) {
+function Home() {
   return (
     <>
       <header className=" h-[700px] bg-san-marino-100">

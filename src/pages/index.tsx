@@ -14,10 +14,31 @@ import Image from "next/image";
 import { useState } from "react";
 import { api, type RouterOutputs } from "~/utils/api";
 import arrowIcon from "../../public/images/arrow.svg";
+import { createProxySSGHelpers } from "@trpc/react-query/ssg";
+import { appRouter } from "~/server/api/root";
+import { createInnerTRPCContext } from "~/server/api/trpc";
+import superjson from "superjson";
+import { InferGetServerSidePropsType } from "next";
 
 type Test = RouterOutputs["test"]["getAll"][0];
 
-function Home() {
+export async function getStaticProps() {
+  const ssg = createProxySSGHelpers({
+    router: appRouter,
+    ctx: createInnerTRPCContext({ session: null }),
+    transformer: superjson,
+  });
+
+  await ssg.test.getAll.prefetch();
+
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+    },
+  };
+}
+
+function Home(props: InferGetServerSidePropsType<typeof getStaticProps>) {
   return (
     <>
       <header className=" h-[700px] bg-san-marino-100">

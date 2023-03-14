@@ -1,28 +1,29 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import Image from "next/image";
-import Container from "components/ui/Container";
 import { LinkButton } from "components/ui";
-import { Card } from "components/ui/Card";
 import Box from "components/ui/Box";
 import Button from "components/ui/Button";
-import arrowIcon from "../../public/images/arrow.svg";
+import { Card } from "components/ui/Card";
+import Container from "components/ui/Container";
 import {
   Modal,
-  ModalHeader,
   ModalBody,
   ModalFooter,
+  ModalHeader,
 } from "components/ui/Modal";
+import Image from "next/image";
 import { useState } from "react";
-import { api } from "~/utils/api";
+import { api, type RouterOutputs } from "~/utils/api";
+import arrowIcon from "../../public/images/arrow.svg";
 
-// type Post = RouterOutputs["test"]["getAll"][0];
+type Test = RouterOutputs["test"]["getAll"][0];
 
 function Home() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const posts = api.test.getAll.useQuery();
+  const tests = api.test.getAll.useQuery();
 
-  if (posts.isLoading) return <div>Loading...</div>;
-  if (posts.isError) return <div>Error</div>;
+  if (tests.isLoading) return <div>Loading...</div>;
+  if (tests.isError) return <div>Error</div>;
+
+  console.log(tests.data);
 
   return (
     <>
@@ -55,37 +56,12 @@ function Home() {
         <Container maxWidth="6xl" className="m-auto my-12">
           <h2 className="mb-12  text-3xl font-semibold">Featured tests</h2>
           <div className="flex h-full gap-6 overflow-x-scroll py-2">
-            {posts.data.map((card) => (
-              <Card className=" min-w-max" shadow="shadow" key={card.title}>
-                <Image
-                  src={card.imageUrl}
-                  width={300}
-                  height={300}
-                  alt={card.title}
-                />
-                <Box className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-xl font-medium">{card.title}</h3>
-                    <p className="text-sm text-san-marino-800">
-                      {card.description}
-                    </p>
-                  </div>
-                  <Button
-                    rounded="full"
-                    padding="none"
-                    color="primary"
-                    animate
-                    onClick={() => setIsModalOpen(true)}
-                  >
-                    <Image src={arrowIcon} alt="arrow" />
-                  </Button>
-                </Box>
-              </Card>
+            {tests.data.map((test) => (
+              <TestCard key={test.id} test={test} />
             ))}
           </div>
         </Container>
       </main>
-      <StartTestModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
     </>
   );
 }
@@ -95,22 +71,53 @@ export default Home;
 interface ModalProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  test: Test;
 }
 
-function StartTestModal({ isOpen, setIsOpen }: ModalProps) {
+interface TestCardProps {
+  test: Test;
+}
+
+function TestCard({ test }: TestCardProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  return (
+    <Card className=" min-w-max" shadow="shadow" key={test.title}>
+      <Image src={test.imageUrl} width={300} height={300} alt={test.title} />
+      <Box className="flex items-center justify-between">
+        <div>
+          <h3 className="text-xl font-medium">{test.title}</h3>
+          <p className="text-sm text-san-marino-800">{test.description}</p>
+        </div>
+        <Button
+          rounded="full"
+          padding="none"
+          color="primary"
+          animate
+          onClick={() => setIsModalOpen(true)}
+        >
+          <Image src={arrowIcon} alt="arrow" />
+        </Button>
+      </Box>
+      <StartTestModal
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        test={test}
+      />
+    </Card>
+  );
+}
+
+function StartTestModal({ isOpen, setIsOpen, test }: ModalProps) {
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <ModalHeader>
         <h2 className="text-2xl font-semibold text-san-marino-900">
-          Start test
+          {test.title}
         </h2>
       </ModalHeader>
       <ModalBody>
-        <p className="text-sm text-san-marino-800">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-          voluptas, quod, quia, voluptates quae voluptatibus quibusdam
-          consequuntur quos voluptatum quas quidem. Quisquam, quae. Quisquam
-        </p>
+        <p className="text-sm text-san-marino-800">{test.fullDescription}</p>
       </ModalBody>
       <ModalFooter>
         <Button
@@ -120,9 +127,9 @@ function StartTestModal({ isOpen, setIsOpen }: ModalProps) {
         >
           Cancel
         </Button>
-        <Button color="primary" animate>
+        <LinkButton to={`/test/${test.id}`} color="primary" animate>
           Start test
-        </Button>
+        </LinkButton>
       </ModalFooter>
     </Modal>
   );

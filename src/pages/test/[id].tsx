@@ -6,6 +6,8 @@ import { useState } from "react";
 import cross from "../../../public/images/cross.svg";
 import check from "../../../public/images/check.svg";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { api } from "~/utils/api";
 
 type answerStyling = "correct" | "incorrect" | "default";
 
@@ -86,12 +88,19 @@ const test = {
 };
 
 export default function TestPage() {
+  const router = useRouter();
+  const { id } = router.query;
+
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<{ [key: string]: boolean }>({}); // { question: answer }
 
-  const currentQuestionData = test.questions[currentQuestion];
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isDone, setIsDone] = useState(false);
+
+  const test = api.test.getOne.useQuery({ id: id as string }).data;
+  const currentQuestionData = test?.questions[currentQuestion];
+
+  if (!test) return null;
 
   function checkAnswer() {
     if (!selectedAnswer) return;

@@ -1,9 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { type NextPage } from "next";
 import Image from "next/image";
-import { signIn, signOut, useSession } from "next-auth/react";
-
-import { api } from "~/utils/api";
 import Container from "components/ui/Container";
 import { LinkButton } from "components/ui";
 import { Card } from "components/ui/Card";
@@ -17,33 +13,16 @@ import {
   ModalFooter,
 } from "components/ui/Modal";
 import { useState } from "react";
+import { api } from "~/utils/api";
 
-const fakeCards = [
-  {
-    title: "HTML basics",
-    description: "Learn the basics of HTML",
-    image: "https://source.unsplash.com/random/400x400/?webdeveloper",
-  },
-  {
-    title: "CSS basics",
-    description: "Learn the basics of CSS",
-    image: "https://source.unsplash.com/random/400x400/?webdeveloper",
-  },
-  {
-    title: "JavaScript basics",
-    description: "Learn the basics of JavaScript",
-    image: "https://source.unsplash.com/random/400x400/?webdeveloper",
-  },
-  {
-    title: "React basics",
-    description: "Learn the basics of React",
-    image: "https://source.unsplash.com/random/400x400/?webdeveloper",
-  },
-];
+// type Post = RouterOutputs["test"]["getAll"][0];
 
-const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const posts = api.test.getAll.useQuery();
+
+  if (posts.isLoading) return <div>Loading...</div>;
+  if (posts.isError) return <div>Error</div>;
 
   return (
     <>
@@ -76,10 +55,10 @@ const Home: NextPage = () => {
         <Container maxWidth="6xl" className="m-auto my-12">
           <h2 className="mb-12  text-3xl font-semibold">Featured tests</h2>
           <div className="flex h-full gap-6 overflow-x-scroll py-2">
-            {fakeCards.map((card) => (
+            {posts.data.map((card) => (
               <Card className=" min-w-max" shadow="shadow" key={card.title}>
                 <Image
-                  src={card.image}
+                  src={card.imageUrl}
                   width={300}
                   height={300}
                   alt={card.title}
@@ -109,7 +88,7 @@ const Home: NextPage = () => {
       <StartTestModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
     </>
   );
-};
+}
 
 export default Home;
 

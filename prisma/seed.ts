@@ -13,6 +13,7 @@ async function main() {
       fullDescription:
         "In this test you will learn the basics of html. You will learn about the different tags and how to use them. You will also learn about the different attributes and how to use them.",
       imageUrl: "https://source.unsplash.com/p9OkL4yW3C8",
+      featured: true,
       questions: {
         create: [
           {
@@ -90,6 +91,7 @@ async function main() {
       fullDescription:
         "In this test you will learn the basics of css. You will learn about the different selectors and how to use them. You will also learn about the different properties and how to use them.",
       imageUrl: "https://source.unsplash.com/NzERTNpnaDw",
+      featured: true,
       questions: {
         create: [
           {
@@ -167,6 +169,7 @@ async function main() {
       fullDescription:
         "In this test you will learn the basics of javascript. You will learn about the different data types and how to use them. You will also learn about the different operators and how to use them.",
       imageUrl: "https://source.unsplash.com/xkBaqlcqeb4",
+      featured: true,
       questions: {
         create: [
           {

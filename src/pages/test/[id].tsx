@@ -78,7 +78,7 @@ export function TestPage() {
 
   if (test.isLoading)
     return (
-      <div className="flex h-full w-full items-center justify-center">
+      <div className="flex h-screen w-screen items-center justify-center">
         <h2 className=" text-xl">Loading</h2>
       </div>
     );
@@ -138,7 +138,7 @@ export function TestPage() {
 
 export default function TestPageWrapper() {
   return (
-    <div className="h-full w-full bg-san-marino-100">
+    <div className="h-screen w-screen bg-san-marino-100">
       <TestPage />
     </div>
   );

@@ -138,7 +138,7 @@ export function TestPage() {
 
 export default function TestPageWrapper() {
   return (
-    <div className="w-full bg-san-marino-100">
+    <div className="h-full w-full bg-san-marino-100">
       <TestPage />
     </div>
   );

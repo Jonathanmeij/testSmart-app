@@ -18,9 +18,8 @@ import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import { appRouter } from "~/server/api/root";
 import { createInnerTRPCContext } from "~/server/api/trpc";
 import superjson from "superjson";
-import { InferGetServerSidePropsType } from "next";
 
-type Test = RouterOutputs["test"]["getAll"][0];
+type Test = RouterOutputs["test"]["getFeatured"][0];
 
 export async function getStaticProps() {
   const ssg = createProxySSGHelpers({
@@ -29,7 +28,7 @@ export async function getStaticProps() {
     transformer: superjson,
   });
 
-  await ssg.test.getAll.prefetch();
+  await ssg.test.getFeatured.prefetch();
 
   return {
     props: {
@@ -81,7 +80,7 @@ function Home() {
 export default Home;
 
 function FeaturedTests() {
-  const tests = api.test.getAll.useQuery();
+  const tests = api.test.getFeatured.useQuery();
 
   if (tests.isLoading) return <div>Loading...</div>;
   if (tests.isError) return <div>Error</div>;
@@ -89,7 +88,7 @@ function FeaturedTests() {
   console.log(tests.data);
 
   return (
-    <div className="flex h-full gap-6 overflow-x-scroll py-2">
+    <div className="m-auto flex h-full gap-6 overflow-x-scroll py-2">
       {tests.data.map((test) => (
         <TestCard key={test.id} test={test} />
       ))}

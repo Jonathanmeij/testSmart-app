@@ -3,8 +3,12 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const testRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.test.findMany();
+  getFeatured: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.test.findMany({
+      where: {
+        featured: true,
+      },
+    });
   }),
   getOne: publicProcedure
     .input(z.object({ id: z.string() }))

@@ -11,83 +11,7 @@ import { api } from "~/utils/api";
 
 type answerStyling = "correct" | "incorrect" | "default";
 
-const test = {
-  title: "HTML basics",
-  description: "Learn the basics of HTML",
-  image: "https://source.unsplash.com/random/400x400/?webdeveloper",
-  questions: [
-    {
-      question: "What is HTML?",
-      answers: [
-        {
-          answer: "A programming language",
-          isCorrect: false,
-        },
-        {
-          answer: "A markup language",
-          isCorrect: true,
-        },
-        {
-          answer: "A framework",
-          isCorrect: false,
-        },
-      ],
-    },
-    {
-      question: "What is the correct HTML for adding a background color?",
-      answers: [
-        {
-          answer: "<body style='background-color:yellow;'>",
-          isCorrect: false,
-        },
-        {
-          answer: "<body bg='yellow'>",
-          isCorrect: false,
-        },
-        {
-          answer: "<body style='background-color:yellow;a'>",
-          isCorrect: true,
-        },
-      ],
-    },
-    {
-      question: "What is the correct HTML for creating a hyperlink?",
-      answers: [
-        {
-          answer: "<a url='http://www.w3schools.com'>W3Schools.com</a>",
-          isCorrect: false,
-        },
-        {
-          answer: "<a href='http://www.w3schools.com'>W3Schools.com</a>",
-          isCorrect: true,
-        },
-        {
-          answer: "<a>http://www.w3schools.com</a>",
-          isCorrect: false,
-        },
-      ],
-    },
-    {
-      question: "Which character is used to indicate an end tag?",
-      answers: [
-        {
-          answer: "*",
-          isCorrect: false,
-        },
-        {
-          answer: "/",
-          isCorrect: false,
-        },
-        {
-          answer: ">",
-          isCorrect: true,
-        },
-      ],
-    },
-  ],
-};
-
-export default function TestPage() {
+export function TestPage() {
   const router = useRouter();
   const { id } = router.query;
 
@@ -97,10 +21,12 @@ export default function TestPage() {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isDone, setIsDone] = useState(false);
 
-  const test = api.test.getOne.useQuery({ id: id as string }).data;
-  const currentQuestionData = test?.questions[currentQuestion];
+  const test = api.test.getOne.useQuery({ id: id as string });
+  const testData = test.data;
 
-  if (!test) return null;
+  if (!testData) return <div>Test not found</div>;
+
+  const currentQuestionData = testData.questions[currentQuestion];
 
   function checkAnswer() {
     if (!selectedAnswer) return;
@@ -150,25 +76,33 @@ export default function TestPage() {
     );
   });
 
+  if (test.isLoading)
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <h2 className=" text-xl">Loading</h2>
+      </div>
+    );
+
+  if (test.isError) return <div>Error</div>;
+
   return (
-    <div
-      className="w-full bg-san-marino-100
-    "
-    >
+    <>
       <div
         className={`absolute h-2 w-full translate-y-16 bg-san-marino-500`}
-        style={{ width: `${(currentQuestion / test.questions.length) * 100}%` }}
+        style={{
+          width: `${(currentQuestion / testData.questions.length) * 100}%`,
+        }}
       />
       <Container
         maxWidth="2xl"
         className="m-auto flex h-screen w-full items-center justify-center pt-16"
       >
-        {currentQuestion == test.questions.length ? (
+        {currentQuestion == testData.questions.length ? (
           <div className="text-center">
             <h1 className="mb-4 text-4xl font-bold">Test completed</h1>
             <p className="mb-4 text-xl">
               You got {Object.values(answers).filter((answer) => answer).length}{" "}
-              out of {test.questions.length} correct
+              out of {testData.questions.length} correct
             </p>
             <LinkButton color="primary" to="/">
               Home
@@ -198,6 +132,14 @@ export default function TestPage() {
           </>
         )}
       </Container>
+    </>
+  );
+}
+
+export default function TestPageWrapper() {
+  return (
+    <div className="w-full bg-san-marino-100">
+      <TestPage />
     </div>
   );
 }

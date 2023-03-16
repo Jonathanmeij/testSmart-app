@@ -6,9 +6,11 @@ import Container from "./Container";
 import helpIcon from "../../public/images/help.svg";
 import LinkButton from "./LinkButton";
 import { Menu, Transition } from "@headlessui/react";
-import Divider from "./Divider";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Button from "./Button";
+import { Fragment, useState } from "react";
+import Box from "./Box";
+import Divider from "./Divider";
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -54,23 +56,68 @@ export default function Navbar() {
 }
 
 function LoggedInLinks() {
-  const { data: session } = useSession();
   return (
     <>
-      <li>
-        <LinkButton color="secondary" to="/dashboard">
-          Dashboard
-        </LinkButton>
-      </li>
-      <li>
-        <div
-          onClick={() => void signOut()}
-          className="w-10 overflow-hidden rounded-full"
-        >
-          <img src={session?.user.image ?? ""} alt="User avatar" />
-        </div>
+      <li className="h-10">
+        <AccountMenu />
       </li>
     </>
+  );
+}
+
+function AccountMenu() {
+  const { data: session } = useSession();
+
+  return (
+    <Menu as="div" className="relative inline-block text-left">
+      <Menu.Button className=" w-10  overflow-hidden rounded-full">
+        <img src={session?.user.image ?? ""} alt="User avatar" />
+      </Menu.Button>
+      <Transition
+        as={Fragment}
+        enter="transition ease-out duration-100"
+        enterFrom="transform opacity-0 scale-95"
+        enterTo="transform opacity-100 scale-100"
+        leave="transition ease-in duration-75"
+        leaveFrom="transform opacity-100 scale-100"
+        leaveTo="transform opacity-0 scale-95"
+      >
+        <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <div className="p-2 text-xl font-semibold">{session?.user.name}</div>
+          <div className="flex w-full p-1">
+            <Menu.Item>
+              {({ active }) => (
+                <LinkButton
+                  textAlign="left"
+                  font="normal"
+                  color="none"
+                  to="/account"
+                  fullWidth
+                  className={active ? "bg-gray-100" : ""}
+                >
+                  Account
+                </LinkButton>
+              )}
+            </Menu.Item>
+          </div>
+          <div className="flex w-full p-1">
+            <Menu.Item>
+              {({ active }) => (
+                <Button
+                  textAlign="left"
+                  color="danger"
+                  fullWidth
+                  onClick={() => void signOut()}
+                  className={active ? "bg-red-200" : ""}
+                >
+                  Sign out
+                </Button>
+              )}
+            </Menu.Item>
+          </div>
+        </Menu.Items>
+      </Transition>
+    </Menu>
   );
 }
 
@@ -124,63 +171,51 @@ function MobileMenuButton() {
   );
 }
 
-type MenuItem = {
-  name: string;
-  href: string;
-  delay: string;
-  leaveDelay: string;
-  color?: "primary" | "secondary" | "secondaryDarker";
-};
-
-const MenuItemsType: MenuItem[] = [
-  {
-    name: "Home",
-    href: "/",
-    delay: "delay-[0ms]",
-    leaveDelay: "delay-[150ms]",
-  },
-  {
-    name: "About",
-    href: "/about",
-    delay: "delay-[50ms]",
-    leaveDelay: "delay-[100ms]",
-  },
-  {
-    name: "Login",
-    href: "/login",
-    delay: "delay-[100ms]",
-    leaveDelay: "delay-[50ms]",
-    color: "primary",
-  },
-  {
-    name: "Sign up",
-    href: "/sign-up",
-    delay: "delay-[150ms]",
-    leaveDelay: "delay-[0ms]",
-    color: "secondaryDarker",
-  },
-];
-
 function MenuItems() {
+  const { data: session } = useSession();
+
   return (
-    <Container className="flex w-full flex-col gap-8 rounded-xl text-2xl">
-      {MenuItemsType.map((item) => (
-        <TransitionChild
-          key={item.name}
-          delay={item.delay}
-          leaveDelay={item.leaveDelay}
-        >
+    <Container className="flex w-full flex-col gap-8 rounded-xl text-xl">
+      <TransitionChild delay={"delay-[0ms]"} leaveDelay={"delay-[150ms]"}>
+        <Menu.Item>
+          <LinkButton fullWidth color={"secondary"} to={"/"}>
+            Home
+          </LinkButton>
+        </Menu.Item>
+      </TransitionChild>
+      <TransitionChild delay={"delay-[50ms]"} leaveDelay={"delay-[100ms]"}>
+        <Menu.Item>
+          <LinkButton fullWidth color={"secondary"} to={"/about"}>
+            About
+          </LinkButton>
+        </Menu.Item>
+      </TransitionChild>
+      {session ? (
+        <TransitionChild delay={"delay-[150ms]"} leaveDelay={"delay-[0ms]"}>
           <Menu.Item>
-            <LinkButton
-              fullWidth
-              color={item.color ?? "secondary"}
-              to={item.href}
-            >
-              {item.name}
-            </LinkButton>
+            <div className="flex items-center gap-2 rounded bg-san-marino-600 p-2">
+              <div>
+                <img
+                  src={session?.user.image ?? ""}
+                  className="w-20 overflow-hidden rounded-full"
+                  alt="User avatar"
+                />
+              </div>
+              <LinkButton fullWidth color="noneWhite" to={"/account"}>
+                Account
+              </LinkButton>
+            </div>
           </Menu.Item>
         </TransitionChild>
-      ))}
+      ) : (
+        <TransitionChild delay={"delay-[150ms]"} leaveDelay={"delay-[0ms]"}>
+          <Menu.Item>
+            <Button fullWidth color={"primary"} onClick={() => void signIn()}>
+              Sign up
+            </Button>
+          </Menu.Item>
+        </TransitionChild>
+      )}
     </Container>
   );
 }

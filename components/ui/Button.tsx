@@ -1,5 +1,4 @@
 import { cva, type VariantProps } from "class-variance-authority";
-import Link from "next/link";
 
 const buttonStyles = cva("font-semibold  border-1", {
   variants: {

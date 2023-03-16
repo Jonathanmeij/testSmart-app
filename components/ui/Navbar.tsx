@@ -68,6 +68,12 @@ function LoggedInLinks() {
 function AccountMenu() {
   const { data: session } = useSession();
 
+  function logout() {
+    console.log("logout");
+
+    signOut();
+  }
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button className=" w-10  overflow-hidden rounded-full">
@@ -93,6 +99,7 @@ function AccountMenu() {
                   color="none"
                   to="/account"
                   fullWidth
+                  className={active ? "bg-gray-100" : ""}
                 >
                   Account
                 </LinkButton>
@@ -106,7 +113,8 @@ function AccountMenu() {
                   textAlign="left"
                   color="danger"
                   fullWidth
-                  onClick={() => void signOut()}
+                  onClick={() => logout()}
+                  className={active ? "bg-red-200" : ""}
                 >
                   Sign out
                 </Button>

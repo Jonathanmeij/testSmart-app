@@ -8,6 +8,7 @@ import check from "../../../public/images/check.svg";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
+import { RadioGroup } from "@headlessui/react";
 
 type answerStyling = "correct" | "incorrect" | "default";
 
@@ -17,7 +18,6 @@ export function TestPage() {
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<{ [key: string]: boolean }>({}); // { question: answer }
-
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isDone, setIsDone] = useState(false);
 
@@ -27,6 +27,8 @@ export function TestPage() {
   if (!testData) return <div>Test not found</div>;
 
   const currentQuestionData = testData.questions[currentQuestion];
+
+  const questionCount = testData.questions.length;
 
   function checkAnswer() {
     if (!selectedAnswer) return;
@@ -66,6 +68,7 @@ export function TestPage() {
         id={answer.answer}
         label={answer.answer}
         value={answer.answer}
+        isDone={isDone}
         name="answer"
         onChange={(e) => {
           setSelectedAnswer(e.target.value);
@@ -76,12 +79,13 @@ export function TestPage() {
     );
   });
 
-  if (test.isLoading)
+  if (test.isLoading) {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
         <h2 className=" text-xl">Loading</h2>
       </div>
     );
+  }
 
   if (test.isError) return <div>Error</div>;
 
@@ -111,23 +115,38 @@ export function TestPage() {
         ) : (
           <>
             {currentQuestionData && (
-              <div className="flex w-full flex-col gap-6">
-                <h1 className="text-3xl font-bold">
-                  {currentQuestionData.question}
-                </h1>
-                <div className="flex flex-col gap-3">{AnswerElements}</div>
-                <div>
-                  {isDone == false ? (
-                    <Button onClick={checkAnswer} color="primary" animate>
-                      Check
-                    </Button>
-                  ) : (
-                    <Button onClick={nextQuestion} color="primary" animate>
-                      Next {">"}
-                    </Button>
-                  )}
+              <RadioGroup
+                aria-label="Question and answer"
+                className="flex w-full flex-col gap-6"
+                value={selectedAnswer}
+                onChange={setSelectedAnswer}
+              >
+                <div className="flex flex-col gap-2">
+                  <RadioGroup.Label className="text-3xl font-bold">
+                    {currentQuestionData.question}
+                  </RadioGroup.Label>
+                  <RadioGroup.Description className="">
+                    {currentQuestionData.description}
+                  </RadioGroup.Description>
                 </div>
-              </div>
+                <div className="flex flex-col gap-3">{AnswerElements}</div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    {isDone == false ? (
+                      <Button onClick={checkAnswer} color="primary" animate>
+                        Check
+                      </Button>
+                    ) : (
+                      <Button onClick={nextQuestion} color="primary" animate>
+                        Next {">"}
+                      </Button>
+                    )}
+                  </div>
+                  <div>
+                    {currentQuestion + 1} / {questionCount}
+                  </div>
+                </div>
+              </RadioGroup>
             )}
           </>
         )}
@@ -153,56 +172,60 @@ interface RadioInputProps {
   checked: boolean;
   className?: string;
   styling: answerStyling;
+  isDone: boolean;
 }
 
 function RadioInput({
-  id,
   label,
   value,
-  onChange,
-  checked,
-  name,
   className,
   styling,
+  isDone,
 }: RadioInputProps) {
-  function getStyle() {
+  // function getStyle() {
+  //   if (styling === "correct") {
+  //     return "border-green-500 bg-green-50";
+  //   } else if (styling === "incorrect") {
+  //     return "border-red-500 bg-red-50";
+  //   } else {
+  //     return "bg-white peer-checked:border-san-marino-500";
+  //   }
+  // }
+
+  function getStyle(active: boolean, checked: boolean): string {
     if (styling === "correct") {
       return "border-green-500 bg-green-50";
     } else if (styling === "incorrect") {
       return "border-red-500 bg-red-50";
-    } else {
-      return "bg-white peer-checked:border-san-marino-500";
+    } else if (styling === "default" && isDone) {
+      return "disabled ";
     }
+    if (checked) {
+      return "border-san-marino-500 bg-san-marino-50";
+    }
+    return "bg-white ";
   }
-
-  console.log(getStyle());
 
   return (
     <div className="transition ease-in-out hover:scale-105">
-      <input
-        type="radio"
-        id={id}
-        name={name}
-        value={value}
-        onChange={onChange}
-        className={`peer hidden`}
-        checked={checked}
-      />
-      <label
-        className={`${
-          className ?? ""
-        } flex w-full cursor-pointer items-center justify-between break-words rounded border-2 
-          p-6 ${getStyle()}`}
-        htmlFor={id}
-      >
-        <div>{label}</div>
-        {styling === "correct" && (
-          <Image alt="check" src={check} width={20} height={20} />
+      <RadioGroup.Option value={value} disabled={isDone}>
+        {({ active, checked }) => (
+          <li
+            className={`${
+              className ?? ""
+            } flex w-full cursor-pointer items-center justify-between break-words rounded border-2 
+          p-6 ${getStyle(active, checked)}`}
+          >
+            <div>{label}</div>
+            {styling === "correct" && (
+              <Image alt="check" src={check} width={20} height={20} />
+            )}
+            {styling === "incorrect" && (
+              <Image alt="x" src={cross} width={20} height={20} />
+            )}
+          </li>
         )}
-        {styling === "incorrect" && (
-          <Image alt="x" src={cross} width={20} height={20} />
-        )}
-      </label>
+      </RadioGroup.Option>
     </div>
   );
 }

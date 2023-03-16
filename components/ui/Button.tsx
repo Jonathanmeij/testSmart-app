@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import Link from "next/link";
 
-const buttonStyles = cva("font-semibold text-center border-1", {
+const buttonStyles = cva("font-semibold  border-1", {
   variants: {
     color: {
       primary:
@@ -9,8 +9,8 @@ const buttonStyles = cva("font-semibold text-center border-1", {
       secondary: " bg-white text-san-marino-900 hover:bg-san-marino-50 ",
       secondaryDarker:
         " border border-gray-300 text-san-marino-900 hover:bg-san-marino-100",
-      none: "bg-transparent hover:bg-gray-900 border-0",
-      danger: " bg-red-600 text-white hover:bg-red-700 border-red-500",
+      none: "bg-transparent hover:bg-san-marino-50 border-0",
+      danger: " bg-red-100 text-red-800 hover:bg-red-200 border-red-500",
     },
     padding: {
       none: "p-0",
@@ -31,6 +31,16 @@ const buttonStyles = cva("font-semibold text-center border-1", {
       true: " transition ease-in-out hover:scale-105 ",
       false: "",
     },
+    font: {
+      normal: "font-normal",
+      bold: "font-bold",
+      semibold: "font-semibold",
+    },
+    textAlign: {
+      left: "text-left",
+      right: "text-right",
+      center: "text-center",
+    },
   },
   defaultVariants: {
     color: "none",
@@ -38,6 +48,8 @@ const buttonStyles = cva("font-semibold text-center border-1", {
     fullWidth: false,
     rounded: "rounded",
     animate: false,
+    font: "semibold",
+    textAlign: "center",
   },
 });
 
@@ -62,6 +74,8 @@ function Button({
   className,
   rounded,
   animate,
+  font,
+  textAlign,
 }: ButtonProps) {
   return (
     <button
@@ -71,6 +85,8 @@ function Button({
         fullWidth,
         rounded,
         animate,
+        font,
+        textAlign,
       })} ${className ?? ""}`}
       onClick={onClick}
       type={type}

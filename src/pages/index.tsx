@@ -23,6 +23,9 @@ import superjson from "superjson";
 import { difficulty } from "@prisma/client";
 import { EnumToNormal } from "~/utils/EnumToNormal";
 
+import { signIn, useSession } from "next-auth/react";
+
+
 type Test = RouterOutputs["test"]["getFeatured"][0];
 
 export async function getStaticProps() {
@@ -59,9 +62,9 @@ function Home() {
             </p>
 
             <div className="mt-6 flex gap-3">
-              <LinkButton color="primary" to="/sign-up" animate>
+              <Button color="primary" onClick={() => void signIn()} animate>
                 Sign up
-              </LinkButton>
+              </Button>
               <LinkButton color="secondary" to="/about" animate>
                 Learn more
               </LinkButton>

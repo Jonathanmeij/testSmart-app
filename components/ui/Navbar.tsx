@@ -84,7 +84,7 @@ function AccountMenu() {
       >
         <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="p-2 text-xl font-semibold">{session?.user.name}</div>
-          <div className="flex w-full p-1">
+          <div className="flex w-full flex-col p-1">
             <Menu.Item>
               {({ active }) => (
                 <LinkButton
@@ -96,6 +96,20 @@ function AccountMenu() {
                   className={active ? "bg-gray-100" : ""}
                 >
                   Account
+                </LinkButton>
+              )}
+            </Menu.Item>
+            <Menu.Item>
+              {({ active }) => (
+                <LinkButton
+                  textAlign="left"
+                  font="normal"
+                  color="none"
+                  to="/dashboard"
+                  fullWidth
+                  className={active ? "bg-gray-100" : ""}
+                >
+                  Dashboard
                 </LinkButton>
               )}
             </Menu.Item>

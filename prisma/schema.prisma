@@ -55,6 +55,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    testHistory   TestHistory[]
 }
 
 model VerificationToken {
@@ -83,7 +84,20 @@ model Test {
     featured     Boolean @default(false)
     category     String @default("General")
     difficulty   difficulty @default(EASY)
+    users        TestHistory[]
 } 
+
+model TestHistory {
+    id           String  @id @default(cuid())
+    test         Test @relation(fields: [testId], references: [id])
+    testId       String
+    user         User @relation(fields: [userId], references: [id])
+    userId       String
+    time         Int
+    correct      Int
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+}
 
 model Question {
     id             String @id @default(cuid())

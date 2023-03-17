@@ -12,6 +12,7 @@ import { RadioGroup } from "@headlessui/react";
 import { Card } from "components/ui/Card";
 import Box from "components/ui/Box";
 import { secondsToMinuts } from "~/utils/Time";
+import { useSession } from "next-auth/react";
 
 type answerStyling = "correct" | "incorrect" | "default";
 type Test = RouterOutputs["test"]["getOne"];
@@ -19,7 +20,6 @@ type Test = RouterOutputs["test"]["getOne"];
 //refactor this to testPage and questionPage
 export function TestPage({
   setIsTestDone,
-  isTestDone,
   testData,
   answers,
   setAnswers,
@@ -151,18 +151,32 @@ export default function TestPageWrapper() {
   const [time, setTime] = useState(0);
   const [isDone, setIsDone] = useState(false);
   const [answers, setAnswers] = useState<{ [key: string]: boolean }>({}); // { question: answer }
+  const { data: session } = useSession();
 
   //fetch data
   const router = useRouter();
   const { id } = router.query;
   const test = api.test.getOne.useQuery({ id: id as string });
   const testData = test.data;
+  const correctAnswerCount = Object.values(answers).filter(
+    (answer) => answer
+  ).length;
+
+  const testMutation = api.user.addTestToUser.useMutation({
+    onSuccess: () => {
+      console.log("success");
+    },
+  });
 
   //set Timer
   useEffect(() => {
     if (isDone) {
-      console.log("done");
-      return;
+      if (!session) return;
+      testMutation.mutate({
+        testId: id as string,
+        correct: correctAnswerCount,
+        time: time,
+      });
     }
 
     const interval = setInterval(() => {
@@ -170,7 +184,7 @@ export default function TestPageWrapper() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [time, isDone]);
+  }, [time, isDone, correctAnswerCount, id, session, testMutation]);
 
   //check if test fetch is done
   if (test.isLoading) {

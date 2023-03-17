@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { LinkButton } from "components/ui";
 import Box from "components/ui/Box";
@@ -18,7 +20,11 @@ import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import { appRouter } from "~/server/api/root";
 import { createInnerTRPCContext } from "~/server/api/trpc";
 import superjson from "superjson";
+import { difficulty } from "@prisma/client";
+import { EnumToNormal } from "~/utils/EnumToNormal";
+
 import { signIn, useSession } from "next-auth/react";
+
 
 type Test = RouterOutputs["test"]["getFeatured"][0];
 
@@ -69,7 +75,7 @@ function Home() {
       <main>
         <Container maxWidth="6xl" className="m-auto my-12">
           <h2 className="mb-12  text-3xl font-semibold">Featured tests</h2>
-          <div className="flex h-full gap-6 overflow-x-scroll py-2">
+          <div className="flex gap-6 overflow-x-scroll py-2">
             <FeaturedTests />
           </div>
         </Container>
@@ -111,12 +117,24 @@ function TestCard({ test }: TestCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <Card className=" min-w-max" shadow="shadow" key={test.title}>
-      <Image src={test.imageUrl} width={300} height={300} alt={test.title} />
+    <Card className=" min-w-max " shadow="shadow" key={test.title}>
+      <div className="relative h-52 w-80">
+        <Image
+          src={test.imageUrl}
+          fill
+          alt={test.title}
+          style={{ objectFit: "cover" }}
+        />
+        <div className="absolute top-0 left-0 p-4">
+          <DifficultyLabel difficulty={test.difficulty} />
+        </div>
+      </div>
       <Box className="flex items-center justify-between">
-        <div>
+        <div className="flex  flex-col gap-1">
           <h3 className="text-xl font-medium">{test.title}</h3>
-          <p className="text-sm text-san-marino-800">{test.description}</p>
+          <p className="w-min rounded bg-san-marino-100 p-1 text-sm text-san-marino-800">
+            {EnumToNormal(test.category)}
+          </p>
         </div>
         <Button
           rounded="full"
@@ -137,14 +155,46 @@ function TestCard({ test }: TestCardProps) {
   );
 }
 
+function DifficultyLabel({ difficulty }: { difficulty: difficulty }) {
+  function backgroundColor() {
+    switch (difficulty) {
+      case "EASY":
+        return "bg-green-600";
+      case "MEDIUM":
+        return "bg-yellow-600";
+      case "HARD":
+        return "bg-red-600";
+      default:
+        return "bg-gray-600";
+    }
+  }
+  return (
+    <div
+      className={`rounded px-2 py-1 text-sm text-white ${backgroundColor()}`}
+    >
+      {difficulty}
+    </div>
+  );
+}
+
 function StartTestModal({ isOpen, setIsOpen, test }: ModalProps) {
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-      <ModalHeader>
-        <h2 className="text-2xl font-semibold text-san-marino-900">
-          {test.title}
-        </h2>
-      </ModalHeader>
+      <div>
+        <div className="relative h-32 w-full">
+          <Image
+            src={test.imageUrl}
+            fill
+            alt={test.title}
+            style={{ objectFit: "cover" }}
+          />
+          <div className=" absolute h-full w-full bg-black opacity-50" />
+
+          <Box className="absolute top-0 left-0">
+            <h2 className="text-2xl font-semibold text-white">{test.title}</h2>
+          </Box>
+        </div>
+      </div>
       <ModalBody>
         <p className="text-sm text-san-marino-800">{test.fullDescription}</p>
       </ModalBody>

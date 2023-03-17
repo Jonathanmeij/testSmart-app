@@ -6,12 +6,7 @@ import Box from "components/ui/Box";
 import Button from "components/ui/Button";
 import { Card } from "components/ui/Card";
 import Container from "components/ui/Container";
-import {
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-} from "components/ui/Modal";
+import { Modal, ModalBody, ModalFooter } from "components/ui/Modal";
 import Image from "next/image";
 import { useState } from "react";
 import { api, type RouterOutputs } from "~/utils/api";
@@ -20,11 +15,10 @@ import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import { appRouter } from "~/server/api/root";
 import { createInnerTRPCContext } from "~/server/api/trpc";
 import superjson from "superjson";
-import { difficulty } from "@prisma/client";
+import { type difficulty } from "@prisma/client";
 import { EnumToNormal } from "~/utils/EnumToNormal";
 
 import { signIn, useSession } from "next-auth/react";
-
 
 type Test = RouterOutputs["test"]["getFeatured"][0];
 
@@ -91,8 +85,6 @@ function FeaturedTests() {
 
   if (tests.isLoading) return <div>Loading...</div>;
   if (tests.isError) return <div>Error</div>;
-
-  console.log(tests.data);
 
   return (
     <div className="m-auto flex h-full gap-6 overflow-x-scroll py-2">
@@ -178,10 +170,12 @@ function DifficultyLabel({ difficulty }: { difficulty: difficulty }) {
 }
 
 function StartTestModal({ isOpen, setIsOpen, test }: ModalProps) {
+  const { data: session } = useSession();
+
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <div>
-        <div className="relative h-32 w-full">
+        <div className="relative h-32 w-full overflow-hidden rounded">
           <Image
             src={test.imageUrl}
             fill
@@ -196,7 +190,17 @@ function StartTestModal({ isOpen, setIsOpen, test }: ModalProps) {
         </div>
       </div>
       <ModalBody>
-        <p className="text-sm text-san-marino-800">{test.fullDescription}</p>
+        {!session && (
+          <div className="flex items-center rounded border border-san-marino-300 bg-san-marino-100 p-2">
+            <p className="pr-4 pl-2 text-4xl font-bold text-san-marino-700">
+              !
+            </p>
+            <p className="text text-san-marino-700">
+              {"Your results won't be saved because you're not logged in."}
+            </p>
+          </div>
+        )}
+        <p className="text pt-4 text-san-marino-800">{test.fullDescription}</p>
       </ModalBody>
       <ModalFooter>
         <Button

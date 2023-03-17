@@ -65,6 +65,12 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
+enum difficulty {
+    EASY
+    MEDIUM
+    HARD
+}
+
 model Test {
     id           String  @id @default(cuid())
     title        String @unique
@@ -75,6 +81,8 @@ model Test {
     updatedAt    DateTime @updatedAt
     questions    Question[]
     featured     Boolean @default(false)
+    category     String @default("General")
+    difficulty   difficulty @default(EASY)
 } 
 
 model Question {

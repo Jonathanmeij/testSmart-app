@@ -147,7 +147,7 @@ function TestCard({ test }: TestCardProps) {
   );
 }
 
-function DifficultyLabel({ difficulty }: { difficulty: difficulty }) {
+export function DifficultyLabel({ difficulty }: { difficulty: difficulty }) {
   function backgroundColor() {
     switch (difficulty) {
       case "EASY":

@@ -162,7 +162,7 @@ export function DifficultyLabel({ difficulty }: { difficulty: difficulty }) {
   }
   return (
     <div
-      className={`rounded px-2 py-1 text-sm text-white ${backgroundColor()}`}
+      className={`h-min rounded px-2 py-1 text-sm text-white ${backgroundColor()}`}
     >
       {difficulty}
     </div>

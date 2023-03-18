@@ -169,7 +169,7 @@ function MobileMenuButton() {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Menu.Items className="absolute top-0 right-0 h-max w-full translate-y-16 rounded-xl backdrop-blur">
+            <Menu.Items className="absolute top-0 right-0 z-20 h-max w-full translate-y-16 rounded-xl backdrop-blur">
               <Divider />
               <div
                 className="border-gray-850 z-40 w-full rounded-b border-b 

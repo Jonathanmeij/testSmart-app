@@ -17,4 +17,11 @@ export const userRouter = createTRPCRouter({
         },
       });
     }),
+  getHistory: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.testHistory.findMany({
+      where: { userId: ctx.session.user.id },
+      include: { test: true },
+      orderBy: { createdAt: "desc" },
+    });
+  }),
 });

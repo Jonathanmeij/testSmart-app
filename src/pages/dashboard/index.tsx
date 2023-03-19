@@ -33,7 +33,7 @@ export default function DashBoardPage() {
 function DashBoard() {
   const { data: session, status } = useSession();
   return (
-    <Tab.Group as={"div"} className="pt-16">
+    <Tab.Group as={"div"} className="pt-16" manual>
       <div className="flex h-12 items-center justify-center bg-white ">
         <Tab.List className="flex w-full max-w-[14rem] justify-between font-medium">
           <Tab className="rounded ring-san-marino-200 focus:outline-none focus:ring-2">

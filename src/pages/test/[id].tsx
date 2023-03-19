@@ -268,7 +268,7 @@ function FinishedScreen({ answers, test, time }: FinishedScreenProps) {
             <LinkButton color="secondaryDarker" to="/">
               Home
             </LinkButton>
-            <LinkButton color="primary" to={`/dashoard/history`}>
+            <LinkButton color="primary" to={`/dashboard`}>
               Test history
             </LinkButton>
           </div>

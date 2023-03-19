@@ -133,7 +133,7 @@ function TestCard({ testHistory, allTests }: TestCardProps) {
             className={`${open ? "rounded-t" : "rounded"}`}
             rounded="none"
           >
-            <Disclosure.Button className="w-full">
+            <Disclosure.Button className="w-full ">
               <Box className="flex  justify-between">
                 <div className="flex items-center gap-2">
                   <DifficultyLabel difficulty={test.difficulty} />
@@ -144,7 +144,7 @@ function TestCard({ testHistory, allTests }: TestCardProps) {
                 <div className="flex items-center gap-6">
                   <p>tries: {testTries.length}</p>
                   <Image
-                    className={`z-0 rotate-90 ${open ? "-rotate-90" : ""}`}
+                    className={`  ${open ? "-rotate-90" : "rotate-90 "}`}
                     src={arrow2}
                     alt="V"
                   />
@@ -167,7 +167,7 @@ function TestCard({ testHistory, allTests }: TestCardProps) {
                   {testTries.map((test) => (
                     <tr key={test.id}>
                       <td className="border-t  py-2">
-                        {testHistory.createdAt.toLocaleDateString()}
+                        {test.createdAt.toLocaleDateString()}
                       </td>
                       <td className="border-t py-2 text-center md:text-left">
                         {test.correct} / {test.test.questions.length}

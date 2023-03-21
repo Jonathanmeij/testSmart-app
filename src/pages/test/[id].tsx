@@ -168,15 +168,21 @@ export default function TestPageWrapper() {
     },
   });
 
+  function addTestToUser() {
+    if (!session) return;
+
+    testMutation.mutate({
+      testId: id as string,
+      correct: correctAnswerCount,
+      time: time,
+    });
+  }
+
   //set Timer
   useEffect(() => {
     if (isDone) {
-      if (!session) return;
-      testMutation.mutate({
-        testId: id as string,
-        correct: correctAnswerCount,
-        time: time,
-      });
+      addTestToUser();
+      return;
     }
 
     const interval = setInterval(() => {
@@ -184,7 +190,7 @@ export default function TestPageWrapper() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [time, isDone, correctAnswerCount, id, session, testMutation]);
+  }, [time, isDone]);
 
   //check if test fetch is done
   if (test.isLoading) {
@@ -262,7 +268,7 @@ function FinishedScreen({ answers, test, time }: FinishedScreenProps) {
             <LinkButton color="secondaryDarker" to="/">
               Home
             </LinkButton>
-            <LinkButton color="primary" to={`/dashoard/history`}>
+            <LinkButton color="primary" to={`/dashboard`}>
               Test history
             </LinkButton>
           </div>

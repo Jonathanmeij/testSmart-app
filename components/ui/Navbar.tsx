@@ -58,7 +58,28 @@ export default function Navbar() {
 function LoggedInLinks() {
   return (
     <>
-      <li className="h-10">
+      <li className="flex h-10 items-center gap-3">
+        <LinkButton color="secondary" to="/">
+          Home
+        </LinkButton>
+        <LinkButton
+          color="primary"
+          to="/dashboard
+        "
+        >
+          <div className="flex items-center gap-2">
+            <p>Create</p>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="white"
+            >
+              <path d="M24 9h-9v-9h-6v9h-9v6h9v9h6v-9h9z" />
+            </svg>
+          </div>
+        </LinkButton>
         <AccountMenu />
       </li>
     </>
@@ -70,7 +91,7 @@ function AccountMenu() {
 
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <Menu.Button className=" w-10  overflow-hidden rounded-full">
+      <Menu.Button className="flex w-10 items-center overflow-hidden rounded-full">
         <img src={session?.user.image ?? ""} alt="User avatar" />
       </Menu.Button>
       <Transition
@@ -169,7 +190,7 @@ function MobileMenuButton() {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Menu.Items className="absolute top-0 right-0 h-max w-full translate-y-16 rounded-xl backdrop-blur">
+            <Menu.Items className="absolute top-0 right-0 z-20 h-max w-full translate-y-16 rounded-xl backdrop-blur">
               <Divider />
               <div
                 className="border-gray-850 z-40 w-full rounded-b border-b 

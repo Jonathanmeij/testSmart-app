@@ -4,7 +4,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-const containerStyles = cva("px-6 ", {
+const containerStyles = cva("px-4 md:px-6 ", {
   variants: {
     maxWidth: {
       none: "max-w-none",

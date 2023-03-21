@@ -4,8 +4,9 @@ const buttonStyles = cva("font-semibold  border-1", {
   variants: {
     color: {
       primary:
-        " bg-san-marino-500 text-white border-0  hover:bg-san-marino-600",
-      secondary: " bg-white text-san-marino-900 hover:bg-san-marino-50 ",
+        " bg-san-marino-500 text-white border-0  hover:bg-san-marino-600 shadow-md",
+      secondary:
+        " bg-white text-san-marino-900 hover:bg-san-marino-50 shadow-md",
       secondaryDarker:
         " border border-gray-300 text-san-marino-900 hover:bg-san-marino-100",
       none: "bg-transparent hover:bg-san-marino-50 border-0",

@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
-const cardStlyes = cva("  rounded border-gray-700 border-1", {
+const cardStlyes = cva("  border-gray-700 border-1", {
   variants: {
     shadow: {
       none: "",

@@ -59,7 +59,7 @@ function LoggedInLinks() {
   return (
     <>
       <li className="flex h-10 items-center gap-3">
-        <LinkButton color="secondary" to="/">
+        <LinkButton color="none" to="/">
           Home
         </LinkButton>
         <LinkButton

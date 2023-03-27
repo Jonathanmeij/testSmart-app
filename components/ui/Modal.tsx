@@ -13,7 +13,7 @@ interface ModalProps {
 export function Modal({ isOpen, setIsOpen, children }: ModalProps) {
   return (
     <Transition show={isOpen} as={Fragment}>
-      <Dialog onClose={() => setIsOpen(false)} className="relative z-50">
+      <Dialog onClose={() => setIsOpen(false)} className="relative z-50 ">
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-200"
@@ -36,7 +36,7 @@ export function Modal({ isOpen, setIsOpen, children }: ModalProps) {
           leaveTo="transform scale-95 opacity-0"
         >
           <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-            <Dialog.Panel className="flex w-screen justify-center">
+            <Dialog.Panel className="flex w-full max-w-md justify-center">
               <Card
                 rounded="rounded"
                 shadow="none"
@@ -62,12 +62,12 @@ export function ModalHeader({ children }: { children: React.ReactNode }) {
 }
 
 export function ModalBody({ children }: { children: React.ReactNode }) {
-  return <Box>{children}</Box>;
+  return <Box className=" max-h-96 overflow-auto ">{children}</Box>;
 }
 
 export function ModalFooter({ children }: { children: React.ReactNode }) {
   return (
-    <div className="">
+    <div className="r">
       <Divider />
       <Box className="flex justify-end gap-2 ">{children}</Box>
     </div>

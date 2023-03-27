@@ -191,7 +191,7 @@ function StartTestModal({ isOpen, setIsOpen, test }: ModalProps) {
       </div>
       <ModalBody>
         {!session && (
-          <div className="flex items-center rounded border border-san-marino-300 bg-san-marino-100 p-2">
+          <div className="mb-4 flex items-center rounded border border-san-marino-300 bg-san-marino-100 p-2 ">
             <p className="pr-4 pl-2 text-4xl font-bold text-san-marino-700">
               !
             </p>
@@ -200,7 +200,7 @@ function StartTestModal({ isOpen, setIsOpen, test }: ModalProps) {
             </p>
           </div>
         )}
-        <p className="text pt-4 text-san-marino-800">{test.fullDescription}</p>
+        <p className="text  text-san-marino-800">{test.fullDescription}</p>
       </ModalBody>
       <ModalFooter>
         <Button

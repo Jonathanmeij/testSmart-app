@@ -125,6 +125,7 @@ export function ListBox({ selected, setSelected, options }: ListBoxProps) {
         leave="transition ease-in duration-100"
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
+        show={true}
       >
         <Listbox.Options
           as="div"

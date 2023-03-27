@@ -16,11 +16,16 @@ const cardStlyes = cva("  border-gray-700 border-1", {
       white: "bg-white",
       darkGray: "bg-gray-900",
     },
+    overflow: {
+      true: "",
+      false: "overflow-hidden",
+    },
   },
   defaultVariants: {
     shadow: "none",
     rounded: "rounded",
     color: "white",
+    overflow: false,
   },
 });
 
@@ -30,14 +35,15 @@ interface CardProps extends VariantProps<typeof cardStlyes> {
 }
 
 export function Card(props: CardProps) {
-  const { children, className, shadow, rounded, color } = props;
+  const { children, className, shadow, overflow, rounded, color } = props;
 
   return (
     <div
-      className={` overflow-hidden ${className ?? ""} ${cardStlyes({
+      className={`  ${className ?? ""} ${cardStlyes({
         shadow,
         rounded,
         color,
+        overflow,
       })} `}
     >
       {children}

@@ -8,8 +8,7 @@ import LinkButton from "./LinkButton";
 import { Menu, Transition } from "@headlessui/react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Button from "./Button";
-import { Fragment, useState } from "react";
-import Box from "./Box";
+import { Fragment } from "react";
 import Divider from "./Divider";
 
 export default function Navbar() {
@@ -64,7 +63,7 @@ function LoggedInLinks() {
         </LinkButton>
         <LinkButton
           color="primary"
-          to="/dashboard
+          to="/create
         "
         >
           <div className="flex items-center gap-2">

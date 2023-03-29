@@ -11,9 +11,17 @@ interface ModalProps {
 }
 
 export function Modal({ isOpen, setIsOpen, children }: ModalProps) {
+  console.log(isOpen);
+
+  if (!isOpen) return null;
+
   return (
     <Transition show={isOpen} as={Fragment}>
-      <Dialog onClose={() => setIsOpen(false)} className="relative z-50 ">
+      <Dialog
+        onClose={() => setIsOpen(false)}
+        open={isOpen}
+        className="relative z-50 "
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-200"

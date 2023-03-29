@@ -120,13 +120,12 @@ export function ListBox({ selected, setSelected, options }: ListBoxProps) {
           <path d="M7.33 24l-2.83-2.829 9.339-9.175-9.339-9.167 2.83-2.829 12.17 11.996z" />
         </svg>
       </Listbox.Button>
-      {/* <Transition
+      <Transition
         as={Fragment}
         leave="transition ease-in duration-100"
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
-        show={true}
-      > */}
+      >
         <Listbox.Options
           as="div"
           className="absolute bottom-14 w-full  list-none rounded bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none "
@@ -169,7 +168,7 @@ export function ListBox({ selected, setSelected, options }: ListBoxProps) {
             </Listbox.Option>
           ))}
         </Listbox.Options>
-      {/* </Transition> */}
+      </Transition>
     </Listbox>
   );
 }

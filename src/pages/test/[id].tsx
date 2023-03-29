@@ -82,11 +82,9 @@ export function TestPage({
     return (
       <RadioInput
         key={answer.answer}
-        id={answer.answer}
         label={answer.answer}
         value={answer.answer}
         isDone={isDone}
-        name="answer"
         onChange={(e) => {
           setSelectedAnswer(e.target.value);
         }}
@@ -242,7 +240,7 @@ function FinishedScreen({ answers, test, time }: FinishedScreenProps) {
       maxWidth="2xl"
       className="m-auto flex h-screen w-full items-center justify-center pt-16"
     >
-      <Card shadow="shadow" className="w-full max-w-lg text-center">
+      <Card shadow={true} className="w-full max-w-lg text-center">
         <Box className="flex flex-col gap-6">
           <div>
             <p>Results</p>
@@ -279,10 +277,8 @@ function FinishedScreen({ answers, test, time }: FinishedScreenProps) {
 }
 
 interface RadioInputProps {
-  id: string;
   label: string;
   value: string;
-  name: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   checked: boolean;
   className?: string;
@@ -290,7 +286,7 @@ interface RadioInputProps {
   isDone: boolean;
 }
 
-function RadioInput({
+export function RadioInput({
   label,
   value,
   className,
@@ -313,7 +309,7 @@ function RadioInput({
     } else if (styling === "incorrect") {
       return "border-red-500 bg-red-50";
     } else if (styling === "default" && isDone) {
-      return "disabled ";
+      return "disabled bg-white ";
     }
     if (checked) {
       return "border-san-marino-500 bg-san-marino-50";

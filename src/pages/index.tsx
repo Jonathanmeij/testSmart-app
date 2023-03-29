@@ -109,7 +109,7 @@ function TestCard({ test }: TestCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <Card className=" min-w-max " shadow="shadow" key={test.title}>
+    <Card className=" min-w-max " shadow={true} key={test.title}>
       <div className="relative h-52 w-80">
         <Image
           src={test.imageUrl}

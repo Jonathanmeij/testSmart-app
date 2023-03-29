@@ -129,7 +129,7 @@ function TestCard({ testHistory, allTests }: TestCardProps) {
       {({ open }) => (
         <div>
           <Card
-            shadow="shadow"
+            shadow={true}
             className={`${open ? "rounded-t" : "rounded"}`}
             rounded="none"
           >

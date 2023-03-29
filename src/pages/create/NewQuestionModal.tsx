@@ -9,9 +9,10 @@ import {
   ModalFooter,
   ModalHeader,
 } from "components/ui/Modal";
-import { Dispatch, SetStateAction, useState } from "react";
+import { nanoid } from "nanoid";
+import { type Dispatch, type SetStateAction, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
-import { Question } from ".";
+import { type Question } from ".";
 
 type FormValues = {
   Question: string;
@@ -50,6 +51,7 @@ export default function NewQuestionModal({
     setQuestions((prev) => [
       ...prev,
       {
+        id: nanoid(),
         question: data.Question,
         description: data.Description,
         answers: data.Answers.map((answer) => ({
@@ -74,9 +76,7 @@ export default function NewQuestionModal({
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <ModalHeader>
-          <h1 className="text-2xl font-semibold">New Question</h1>
-        </ModalHeader>
+        <ModalHeader>New Question</ModalHeader>
         <ModalBody>
           <div className="flex flex-col gap-3">
             <div className="flex flex-col gap-3">

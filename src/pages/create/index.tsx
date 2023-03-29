@@ -1,16 +1,18 @@
-import { type Prisma } from "@prisma/client";
+import { RadioGroup } from "@headlessui/react";
 import Box from "components/ui/Box";
 import Button from "components/ui/Button";
 import { Card } from "components/ui/Card";
 import Container from "components/ui/Container";
+import { DeleteButton } from "components/ui/DeleteModal";
 import { Input, TextArea } from "components/ui/Input";
-import { Dispatch, SetStateAction, useState } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
 import {
   type FieldErrors,
   useForm,
   type UseFormRegister,
   type SubmitHandler,
 } from "react-hook-form";
+import { RadioInput } from "../test/[id]";
 import NewQuestionModal from "./NewQuestionModal";
 
 type FormValues = {
@@ -20,6 +22,7 @@ type FormValues = {
 };
 
 export type Question = {
+  id: string;
   question: string;
   description: string;
   answers: Answer[];
@@ -62,7 +65,7 @@ function TopForm({
   errors: FieldErrors<FormValues>;
 }) {
   return (
-    <Card shadow="shadow" className="w-full">
+    <Card shadow={true} className="w-full">
       <Box className="flex flex-col gap-3">
         <Input
           name="Title"
@@ -135,17 +138,34 @@ function Questions({
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  function onDelete(id: string) {
+    setQuestions((prev) => prev.filter((question) => question.id !== id));
+  }
+
   return (
     <div>
       {questions.length === 0 && <EmptyQuestion setIsOpen={setIsModalOpen} />}
       {questions.length > 0 && (
-        <Button
-          color="primary"
-          type="button"
-          onClick={() => setIsModalOpen(true)}
-        >
-          New Question
-        </Button>
+        <div className="flex flex-col gap-6">
+          {questions.map((question) => {
+            return (
+              <Question
+                onDelete={onDelete}
+                key={question.question}
+                question={question}
+              />
+            );
+          })}
+          <div className="flex justify-center">
+            <Button
+              color="primary"
+              type="button"
+              onClick={() => setIsModalOpen(true)}
+            >
+              New Question
+            </Button>
+          </div>
+        </div>
       )}
       <NewQuestionModal
         isOpen={isModalOpen}
@@ -153,6 +173,48 @@ function Questions({
         setQuestions={setQuestions}
       />
     </div>
+  );
+}
+
+interface QuestionProps {
+  question: Question;
+  onDelete: (id: string) => void;
+}
+
+function Question({ question, onDelete }: QuestionProps) {
+  return (
+    <Card color="light" shadow={true} className="p-4">
+      <RadioGroup className=" flex w-full flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <div className="flex justify-between">
+            <RadioGroup.Label className="text-3xl font-bold">
+              {question.question}
+            </RadioGroup.Label>
+            <DeleteButton
+              item="question"
+              onDelete={() => onDelete(question.id)}
+            />
+          </div>
+          <RadioGroup.Description className="">
+            {question.description}
+          </RadioGroup.Description>
+        </div>
+        <div className="flex flex-col gap-3">
+          {question.answers.map((answer) => {
+            return (
+              <RadioInput
+                key={answer.answer}
+                label={answer.answer}
+                styling="default"
+                isDone={true}
+                value={""}
+                checked={false}
+              />
+            );
+          })}
+        </div>
+      </RadioGroup>
+    </Card>
   );
 }
 

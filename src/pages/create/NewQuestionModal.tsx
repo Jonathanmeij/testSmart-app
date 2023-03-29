@@ -9,20 +9,15 @@ import {
   ModalFooter,
   ModalHeader,
 } from "components/ui/Modal";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
+import { Question } from ".";
 
 type FormValues = {
   Question: string;
   Description: string;
   Answers: string[];
 };
-
-// type Answer = {
-//   id: string;
-//   answer: string;
-//   isCorrect: boolean;
-// };
 
 type option = {
   id: number;
@@ -32,18 +27,39 @@ type option = {
 export default function NewQuestionModal({
   isOpen,
   setIsOpen,
+  setQuestions,
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  setQuestions: Dispatch<SetStateAction<Question[]>>;
 }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FormValues>();
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log(data);
-    //stuur data naar create page
+    // id             String @id @default(cuid())
+    // question       String @db.Text
+    // description    String @db.Text
+    // test           Test @relation(fields: [testId], references: [id])
+    // testId         String
+    // answers        Answer[]
+    setQuestions((prev) => [
+      ...prev,
+      {
+        question: data.Question,
+        description: data.Description,
+        answers: data.Answers.map((answer) => ({
+          answer,
+          isCorrect: answer === data.Answers[selectedAnswer],
+        })),
+      },
+    ]);
+    reset();
+    setIsOpen(false);
   };
 
   const [selectedAnswer, setSelectedAnswer] = useState(0);

@@ -1,13 +1,12 @@
+import { type Prisma } from "@prisma/client";
 import Box from "components/ui/Box";
 import Button from "components/ui/Button";
 import { Card } from "components/ui/Card";
 import Container from "components/ui/Container";
 import { Input, TextArea } from "components/ui/Input";
-import { Modal, ModalBody, ModalHeader } from "components/ui/Modal";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import {
   type FieldErrors,
-  type FieldValues,
   useForm,
   type UseFormRegister,
   type SubmitHandler,
@@ -20,9 +19,20 @@ type FormValues = {
   Image: string;
 };
 
+export type Question = {
+  question: string;
+  description: string;
+  answers: Answer[];
+};
+
+export type Answer = {
+  answer: string;
+  isCorrect: boolean;
+};
+
 //main component
 export default function CreatePage() {
-  const [questions, setQuestions] = useState(null);
+  const [questions, setQuestions] = useState<Question[]>([]);
   const {
     register,
     handleSubmit,
@@ -36,7 +46,7 @@ export default function CreatePage() {
         <Container maxWidth="3xl" className=" m-auto flex flex-col gap-6 py-6">
           <h1 className="text-3xl font-semibold">Create a new test</h1>
           <TopForm register={register} errors={errors} />
-          <Questions />
+          <Questions questions={questions} setQuestions={setQuestions} />
         </Container>
       </form>
     </div>
@@ -116,13 +126,32 @@ function TopForm({
   );
 }
 
-function Questions() {
+function Questions({
+  questions,
+  setQuestions,
+}: {
+  questions: Question[];
+  setQuestions: Dispatch<SetStateAction<Question[]>>;
+}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div>
-      <EmptyQuestion setIsOpen={setIsModalOpen} />
-      <NewQuestionModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+      {questions.length === 0 && <EmptyQuestion setIsOpen={setIsModalOpen} />}
+      {questions.length > 0 && (
+        <Button
+          color="primary"
+          type="button"
+          onClick={() => setIsModalOpen(true)}
+        >
+          New Question
+        </Button>
+      )}
+      <NewQuestionModal
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        setQuestions={setQuestions}
+      />
     </div>
   );
 }

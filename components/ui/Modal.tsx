@@ -11,8 +11,6 @@ interface ModalProps {
 }
 
 export function Modal({ isOpen, setIsOpen, children }: ModalProps) {
-  console.log(isOpen);
-
   if (!isOpen) return null;
 
   return (

@@ -3,8 +3,8 @@ import { cva, type VariantProps } from "class-variance-authority";
 const cardStlyes = cva("  border-gray-700 border-1", {
   variants: {
     shadow: {
-      none: "",
-      shadow: "shadow-md shadow-slate-300 ",
+      false: "",
+      true: "shadow-md shadow-slate-300 ",
     },
     rounded: {
       none: "",
@@ -14,18 +14,24 @@ const cardStlyes = cva("  border-gray-700 border-1", {
     color: {
       none: "",
       white: "bg-white",
-      darkGray: "bg-gray-900",
+      light: "bg-san-marino-50",
     },
     overflow: {
       true: "",
       false: "overflow-hidden",
     },
+    border: {
+      none: "",
+      normal: "border-1 border-san-marino-200",
+      dotted: "border-dotted border-1 border-san-marino-200",
+    },
   },
   defaultVariants: {
-    shadow: "none",
+    shadow: false,
     rounded: "rounded",
     color: "white",
     overflow: false,
+    border: "none",
   },
 });
 
@@ -35,7 +41,8 @@ interface CardProps extends VariantProps<typeof cardStlyes> {
 }
 
 export function Card(props: CardProps) {
-  const { children, className, shadow, overflow, rounded, color } = props;
+  const { children, className, shadow, border, overflow, rounded, color } =
+    props;
 
   return (
     <div
@@ -44,6 +51,7 @@ export function Card(props: CardProps) {
         rounded,
         color,
         overflow,
+        border,
       })} `}
     >
       {children}

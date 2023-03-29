@@ -11,7 +11,7 @@ interface ModalProps {
 }
 
 export function Modal({ isOpen, setIsOpen, children }: ModalProps) {
-  if (!isOpen) return null;
+  if (isOpen === undefined) return null;
 
   return (
     <Transition show={isOpen} as={Fragment}>
@@ -43,11 +43,7 @@ export function Modal({ isOpen, setIsOpen, children }: ModalProps) {
         >
           <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
             <Dialog.Panel className="flex w-full max-w-md justify-center">
-              <Card
-                rounded="rounded"
-                shadow="none"
-                className="w-full max-w-md "
-              >
+              <Card rounded="rounded" className="w-full max-w-md ">
                 {children}
               </Card>
             </Dialog.Panel>
@@ -61,7 +57,9 @@ export function Modal({ isOpen, setIsOpen, children }: ModalProps) {
 export function ModalHeader({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <Box>{children}</Box>
+      <Box>
+        <h1 className="text-2xl font-semibold">{children}</h1>
+      </Box>
       <Divider />
     </>
   );
